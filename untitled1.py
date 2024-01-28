@@ -23,6 +23,7 @@ df = pd.read_csv('data.csv')
 # Print First 5 rows
 df.head(10)
 
+
 # Create copy of dataset to visualize it 
 viz = df.copy()
 
@@ -46,8 +47,8 @@ train.head(10)
 
 test.head(10)
 
-# x Train and test with 4 column (Open, High, Low, Volum), Drop (Date, Adj Close, Close(Prediction))
-# x Train and test with 4 column (Open, High, Low, Volum), Drop (Date, Adj Close, Close(Prediction))
+
+# x Train and test with 4 column ['bedrooms', 'bathrooms', 'sqft_living', 'yr_built'], ['price']
 x_train = train[['bedrooms', 'bathrooms', 'sqft_living', 'yr_built']].values
 x_test = test[['bedrooms', 'bathrooms', 'sqft_living', 'yr_built']].values
 # Create y train and test with close columns
@@ -72,52 +73,29 @@ print("MAE",round(mean_absolute_error(y_test,y_pred), 3))
 print("MAPE",round(mean_absolute_percentage_error(y_test,y_pred), 3))
 print("R2 Score : ", round(r2_score(y_test,y_pred), 3) * 100)
 
-# def style():
-#     plt.figure(facecolor='black', figsize=(15,10))
-#     ax = plt.axes()
+# Evaluate the model
+mse = mean_squared_error(y_test, y_pred)
+mae = mean_absolute_error(y_test, y_pred)
+mape = mean_absolute_percentage_error(y_test, y_pred)
+r2 = r2_score(y_test, y_pred)
 
-#     ax.tick_params(axis='x', colors='white')    #setting up X-axis tick color to white
-#     ax.tick_params(axis='y', colors='white')    #setting up Y-axis tick color to white
+# Print evaluation metrics
+print(f'Mean Squared Error (MSE): {mse}')
+print(f'Mean Absolute Error (MAE): {mae}')
+print(f'Mean Absolute Percentage Error (MAPE): {mape}')
+print(f'R-squared (R2): {r2}')
 
-#     ax.spines['left'].set_color('white')        #setting up Y-axis spine color to white
-#     #ax.spines['right'].set_color('white')
-#     #ax.spines['top'].set_color('white')
-#     ax.spines['bottom'].set_color('white')      #setting up X-axis spine color to white
+# Visualize the results
+plt.scatter(y_test, y_pred, color='blue')
+plt.plot([min(y_test), max(y_test)], [min(y_test), max(y_test)], linestyle='--', color='red', linewidth=2, label='Perfect Prediction')
+plt.title('Linear Regression Model - Housing Price Prediction')
+plt.xlabel('True Prices')
+plt.ylabel('Predicted Prices')
+plt.legend()
+plt.show()
 
-#     ax.set_facecolor("black")                   # Setting the background color of the plot using set_facecolor() method
-# viz['Date'] = pd.to_datetime(viz['Date'], format='%m/%d/%Y')
-# data = pd.DataFrame(viz[['Date','Close']])
-# data=data.reset_index()
-# data=data.drop('index',axis=1)
-# data.set_index('Date', inplace=True)
-# data = data.asfreq('D')
-# data
-# style()
 
-# plt.title('Closing Stock Price', color="white")
-# plt.plot(viz.Date, viz.Close, color="#94F008")
-# plt.legend(["Close"], loc ="lower right", facecolor='black', labelcolor='white')
 
-# style()
-
-# plt.scatter(y_pred, y_test, color='red', marker='o')
-# plt.scatter(y_test, y_test, color='blue')
-# plt.plot(y_test, y_test, color='lime')
-# test_pred['Close_Prediction'] = y_pred
-# test_pred
-
-# test_pred[['Close', 'Close_Prediction']].describe().T
-
-# test_pred['Date'] = pd.to_datetime(test_pred['Date'],format='%m/%d/%Y')
-# output = pd.DataFrame(test_pred[['Date', 'Close', 'Close_Prediction']])
-# output = output.reset_index()
-# output = output.drop('index',axis=1)
-# output.set_index('Date', inplace=True)
-# output =  output.asfreq('D')
-# output
-
-# output.to_csv('Close_Prediction.csv', index=True)
-# print("CSV successfully saved!")
 
 def predict_home_price(bedrooms, bathrooms, sqft_living, yr_built):
     input_data = np.array([bedrooms, bathrooms,sqft_living , yr_built]).reshape(1, -1)
